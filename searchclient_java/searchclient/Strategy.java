@@ -90,34 +90,41 @@ public abstract class Strategy {
     }
 
     public static class StrategyDFS extends Strategy {
+    	private ArrayDeque<State> frontier;
+        private HashSet<State> frontierSet;
+        
         public StrategyDFS() {
             super();
-            throw new NotImplementedException();
+            frontier = new ArrayDeque<>();
+            frontierSet = new HashSet<>();
         }
 
         @Override
         public State getAndRemoveLeaf() {
-            throw new NotImplementedException();
+        	State n = frontier.pollFirst();
+            frontierSet.remove(n);
+            return n;
         }
 
         @Override
         public void addToFrontier(State n) {
-            throw new NotImplementedException();
+        	frontier.addFirst(n);
+            frontierSet.add(n);
         }
 
         @Override
         public int countFrontier() {
-            throw new NotImplementedException();
+        	return frontier.size();
         }
 
         @Override
         public boolean frontierIsEmpty() {
-            throw new NotImplementedException();
+        	return frontier.isEmpty();
         }
 
         @Override
         public boolean inFrontier(State n) {
-            throw new NotImplementedException();
+        	return frontierSet.contains(n);
         }
 
         @Override
