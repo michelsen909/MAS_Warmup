@@ -1,6 +1,7 @@
 package searchclient;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public abstract class Strategy {
@@ -135,36 +136,52 @@ public abstract class Strategy {
 
     public static class StrategyBestFirst extends Strategy {
         private Heuristic heuristic;
+    	private ArrayList<State> frontier;
+        private HashSet<State> frontierSet;
 
         public StrategyBestFirst(Heuristic h) {
             super();
             this.heuristic = h;
-            throw new NotImplementedException();
+            frontier = new ArrayList<State>();
+            frontierSet = new HashSet<>();
         }
 
         @Override
         public State getAndRemoveLeaf() {
-            throw new NotImplementedException();
+        	State n = frontier.get(0);
+            frontierSet.remove(n);
+            return n;
         }
 
         @Override
         public void addToFrontier(State n) {
-            throw new NotImplementedException();
+        	boolean isAdded = false;
+        	for(int i =0; i<frontier.size(); i++){
+        		if(heuristic.h(frontier.get(i))>heuristic.h(n)){
+        			isAdded=true;
+        			frontier.add(i, n);
+        		}
+        	}
+        	if(!isAdded){
+        		frontier.add(n);
+        	}
+        	//frontier.addFirst(n);
+            frontierSet.add(n);
         }
 
         @Override
         public int countFrontier() {
-            throw new NotImplementedException();
+        	return frontier.size();
         }
 
         @Override
         public boolean frontierIsEmpty() {
-            throw new NotImplementedException();
+        	return frontier.isEmpty();
         }
 
         @Override
         public boolean inFrontier(State n) {
-            throw new NotImplementedException();
+        	return frontierSet.contains(n);
         }
 
         @Override
