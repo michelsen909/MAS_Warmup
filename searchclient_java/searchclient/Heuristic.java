@@ -27,7 +27,7 @@ public abstract class Heuristic implements Comparator<State> {
     	//ArrayList<Point> boxLocations = new ArrayList<Point>();
     	for(int i=0; i<=SearchClient.rows-1; i++){
     		for(int j=0; j<=SearchClient.cols-1; j++){
-    			char chr = SearchClient.goals[i][j];
+    			char chr = n.boxes[i][j];
     			if('A' <= chr && chr <= 'Z'){
     				Point boxP = new Point(i,j);
     				//boxLocations.add(new Point(i,j));
