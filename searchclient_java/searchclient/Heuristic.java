@@ -21,32 +21,40 @@ public abstract class Heuristic implements Comparator<State> {
    }
 
     public int h(State n) {
-    	int distSum=0;
-    	int shortestAgentDist = Integer.MAX_VALUE;
-    	Point agentLoc = new Point(n.agentRow, n.agentCol);
+    	//int distSum=0;
+    	//int shortestAgentDist = Integer.MAX_VALUE;
+    	//Point agentLoc = new Point(n.agentRow, n.agentCol);
     	//ArrayList<Point> boxLocations = new ArrayList<Point>();
-    	System.err.println("at state \n"+ n.toString());
+    	//System.err.println("at state \n"+ n.toString());
     	
-    	ArrayList<Point> importantBoxes = new ArrayList<Point>();
+    	//ArrayList<Point> importantBoxes = new ArrayList<Point>();
     	int closestBoxDist = Integer.MAX_VALUE;
     	int totalBoxDist = 0;
+    	int shortestAgentDist=Integer.MAX_VALUE;
+    	int closestGoalBox = Integer.MAX_VALUE;
     	//Point boxPoint = new Point();
     	
-    	for(int k =0; k<goalLocations.size(); k++){
+    	for(Point goal : goalLocations){
     		for(int i=0; i<SearchClient.rows; i++){
         		for(int j=0; j<SearchClient.cols; j++){
         			char chr = n.boxes[i][j];
-        			if(SearchClient.goals[goalLocations.get(k).x][goalLocations.get(k).y]==Character.toLowerCase(chr)){
-        				int currentBoxDist = Math.abs(goalLocations.get(k).x-i) + Math.abs(goalLocations.get(k).y-j);
+        			if(SearchClient.goals[goal.x][goal.y]==Character.toLowerCase(chr)){
+        				int currentBoxDist = Math.abs(goal.x-i) + Math.abs(goal.y-j);
         				if(currentBoxDist<closestBoxDist){
         					closestBoxDist=currentBoxDist;
+        					int xAgentDist = Math.abs(n.agentRow-i);
+        					int yAgentDist = Math.abs(n.agentCol-j);
+        					shortestAgentDist = xAgentDist + yAgentDist;
         				}
         			}
         		}
     		}
-    		totalBoxDist =totalBoxDist +closestBoxDist;
+    		if(shortestAgentDist<closestGoalBox){
+    			closestGoalBox=shortestAgentDist;
+    		}
+    		totalBoxDist =totalBoxDist +closestBoxDist + shortestAgentDist;
     	}
-    	return totalBoxDist;
+    	return totalBoxDist+closestGoalBox;
 
 //    	for(int i=0; i<SearchClient.rows; i++){
 //    		for(int j=0; j<SearchClient.cols; j++){

@@ -155,18 +155,9 @@ public abstract class Strategy {
 
         @Override
         public void addToFrontier(State n) {
-        	boolean isAdded = false;
-        	for(int i =0; i<frontier.size(); i++){
-        		if(heuristic.compare(n, frontier.get(i))<0){
-        			isAdded=true;
-        			frontier.add(i, n);
-        		}
-        	}
-        	if(!isAdded){
-        		frontier.add(n);
-        	}
-        	//frontier.addFirst(n);
-            frontierSet.add(n);
+        	frontier.add(n);
+        	frontierSet.add(n);
+        	frontier.sort(heuristic);
         }
 
         @Override
