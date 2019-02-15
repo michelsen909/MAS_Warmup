@@ -157,7 +157,7 @@ public abstract class Strategy {
         public void addToFrontier(State n) {
         	boolean isAdded = false;
         	for(int i =0; i<frontier.size(); i++){
-        		if(heuristic.h(frontier.get(i))>heuristic.h(n)){
+        		if(heuristic.compare(n, frontier.get(i))<0){
         			isAdded=true;
         			frontier.add(i, n);
         		}
