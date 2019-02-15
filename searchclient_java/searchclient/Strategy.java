@@ -148,7 +148,7 @@ public abstract class Strategy {
 
         @Override
         public State getAndRemoveLeaf() {
-        	State n = frontier.get(0);
+        	State n = frontier.remove(0);
             frontierSet.remove(n);
             return n;
         }

@@ -23,10 +23,10 @@ public abstract class Heuristic implements Comparator<State> {
     public int h(State n) {
     	int distSum=0;
     	int shortestAgentDist = Integer.MAX_VALUE;
-    	Point agentLoc = new Point(State.agentRow, State.agentCol);
+    	Point agentLoc = new Point(n.agentRow, n.agentCol);
     	//ArrayList<Point> boxLocations = new ArrayList<Point>();
     	for(int i=0; i<=SearchClient.rows-1; i++){
-    		for(int j=0; i<=SearchClient.cols-1; i++){
+    		for(int j=0; j<=SearchClient.cols-1; j++){
     			char chr = SearchClient.goals[i][j];
     			if('A' <= chr && chr <= 'Z'){
     				Point boxP = new Point(i,j);
