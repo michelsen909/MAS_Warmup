@@ -28,7 +28,7 @@ public class SearchClient {
             System.err.println("Error, client does not support colors.");
             System.exit(1);
         }
-        cols = line.length();
+        cols = line.length()+1;
 
         while(!line.equals("")){
     		rows++;
