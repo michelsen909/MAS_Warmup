@@ -26,34 +26,55 @@ public abstract class Heuristic implements Comparator<State> {
     	Point agentLoc = new Point(n.agentRow, n.agentCol);
     	//ArrayList<Point> boxLocations = new ArrayList<Point>();
     	System.err.println("at state \n"+ n.toString());
-
-    	for(int i=0; i<SearchClient.rows; i++){
-    		for(int j=0; j<SearchClient.cols; j++){
-    			char chr = n.boxes[i][j];
-    			if('A' <= chr && chr <= 'Z'){
-    				Point boxP = new Point(i,j);
-    				//boxLocations.add(new Point(i,j));
-
-    				for (Point p: goalLocations) {
-    				    if(SearchClient.goals[p.x][p.y]==Character.toLowerCase(chr)){
-    				    	int xDist = Math.abs(p.x-boxP.x);
-    				    	int yDist = Math.abs(p.y-boxP.y);
-    				    	if(xDist!=0 || yDist!=0){
-    				    		int xAgentDist = Math.abs(agentLoc.x-boxP.x);
-    					    	int yAgentDist = Math.abs(agentLoc.y-boxP.y);
-    					    	int agentDist= xAgentDist + yAgentDist;
-    					    	
-    					    	if(agentDist<shortestAgentDist){
-    					    		shortestAgentDist = agentDist;
-    					    	}
-    					    	distSum = distSum + xDist + yDist;
-    				    	}
-    				    }
-    				}
-    			}
+    	
+    	ArrayList<Point> importantBoxes = new ArrayList<Point>();
+    	int closestBoxDist = Integer.MAX_VALUE;
+    	int totalBoxDist = 0;
+    	//Point boxPoint = new Point();
+    	
+    	for(int k =0; k<goalLocations.size(); k++){
+    		for(int i=0; i<SearchClient.rows; i++){
+        		for(int j=0; j<SearchClient.cols; j++){
+        			char chr = n.boxes[i][j];
+        			if(SearchClient.goals[goalLocations.get(k).x][goalLocations.get(k).y]==Character.toLowerCase(chr)){
+        				int currentBoxDist = Math.abs(goalLocations.get(k).x-i) + Math.abs(goalLocations.get(k).y-j);
+        				if(currentBoxDist<closestBoxDist){
+        					closestBoxDist=currentBoxDist;
+        				}
+        			}
+        		}
     		}
+    		totalBoxDist =totalBoxDist +closestBoxDist;
     	}
-    	return distSum+shortestAgentDist;
+    	return totalBoxDist;
+
+//    	for(int i=0; i<SearchClient.rows; i++){
+//    		for(int j=0; j<SearchClient.cols; j++){
+//    			char chr = n.boxes[i][j];
+//    			if('A' <= chr && chr <= 'Z'){
+//    				Point boxP = new Point(i,j);
+//    				//boxLocations.add(new Point(i,j));
+//
+//    				for (Point p: goalLocations) {
+//    				    if(SearchClient.goals[p.x][p.y]==Character.toLowerCase(chr)){
+//    				    	int xDist = Math.abs(p.x-boxP.x);
+//    				    	int yDist = Math.abs(p.y-boxP.y);
+//    				    	if(xDist!=0 || yDist!=0){
+//    				    		int xAgentDist = Math.abs(agentLoc.x-boxP.x);
+//    					    	int yAgentDist = Math.abs(agentLoc.y-boxP.y);
+//    					    	int agentDist= xAgentDist + yAgentDist;
+//    					    	
+//    					    	if(agentDist<shortestAgentDist){
+//    					    		shortestAgentDist = agentDist;
+//    					    	}
+//    					    	distSum = distSum + xDist + yDist;
+//    				    	}
+//    				    }
+//    				}
+//    			}
+//    		}
+//    	}
+    	//return distSum+shortestAgentDist;
         //throw new NotImplementedException();
     }
 
