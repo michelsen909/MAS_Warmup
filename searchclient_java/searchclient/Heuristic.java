@@ -25,12 +25,15 @@ public abstract class Heuristic implements Comparator<State> {
     	int shortestAgentDist = Integer.MAX_VALUE;
     	Point agentLoc = new Point(n.agentRow, n.agentCol);
     	//ArrayList<Point> boxLocations = new ArrayList<Point>();
-    	for(int i=0; i<=SearchClient.rows-1; i++){
-    		for(int j=0; j<=SearchClient.cols-1; j++){
+    	System.err.println("at state \n"+ n.toString());
+
+    	for(int i=0; i<SearchClient.rows; i++){
+    		for(int j=0; j<SearchClient.cols; j++){
     			char chr = n.boxes[i][j];
     			if('A' <= chr && chr <= 'Z'){
     				Point boxP = new Point(i,j);
     				//boxLocations.add(new Point(i,j));
+
     				for (Point p: goalLocations) {
     				    if(SearchClient.goals[p.x][p.y]==Character.toLowerCase(chr)){
     				    	int xDist = Math.abs(p.x-boxP.x);
