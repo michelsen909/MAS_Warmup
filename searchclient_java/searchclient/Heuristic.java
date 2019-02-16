@@ -6,6 +6,7 @@ import java.awt.Point;
 
 public abstract class Heuristic implements Comparator<State> {
 	public ArrayList<Point> goalLocations = new ArrayList<Point>();
+	Point closestGoalBox = null;
 	
     public Heuristic(State initialState) {
         // Here's a chance to pre-process the static parts of the level.
@@ -28,13 +29,14 @@ public abstract class Heuristic implements Comparator<State> {
     	//System.err.println("at state \n"+ n.toString());
     	
     	ArrayList<Point> boxes = new ArrayList<Point>();
-    	double closestBoxDist = Integer.MAX_VALUE;
-    	double totalBoxDist = 0;
-    	double shortestAgentDist=Integer.MAX_VALUE;
-    	double closestGoalBox = Integer.MAX_VALUE;
-    	//Point boxPoint = new Point();
+    	double overallShortestDistToValidBox = Integer.MAX_VALUE;
     	
-    	double totalDist = Integer.MAX_VALUE;
+    	double totalBoxDist = 0;
+    	double totalDist = 0;
+    	
+    	//double goalDist =  Integer.MAX_VALUE;
+    	//double closestGoalDist = Integer.MAX_VALUE;
+    	//double shortestAgentDist=Integer.MAX_VALUE;
     	
     	for(int i=0; i<SearchClient.rows; i++){
     		for(int j=0; j<SearchClient.cols; j++){
@@ -46,28 +48,36 @@ public abstract class Heuristic implements Comparator<State> {
     	}
     	
     	for(Point goal : goalLocations){
+    		double shortestDistToValidBox = Integer.MAX_VALUE;
     		for(Point box: boxes){
     			char chr = n.boxes[box.x][box.y];
     			if(SearchClient.goals[goal.x][goal.y]==Character.toLowerCase(chr)){
+    				
     				double x = Math.abs(goal.x-box.x);
     				double y = Math.abs(goal.y-box.y);
-    				double z = x*x+y*y;
-    				double currentBoxDist = Math.sqrt(z);
+    				double distToValidBox = Math.sqrt(x*x+y*y);
     				
-    				double xAgentDist = Math.abs(n.agentRow-box.x);
-    				double yAgentDist = Math.abs(n.agentCol-box.y);
-    				double currentAgentDist = Math.sqrt(xAgentDist*xAgentDist + yAgentDist*yAgentDist);
-    				
-    				double currentTotal = currentBoxDist+currentAgentDist;
-    				
-    				if(currentTotal<totalDist){
-    					totalDist=currentTotal;
+    				if(distToValidBox < shortestDistToValidBox){
+    					shortestDistToValidBox = distToValidBox;
+    					
+    					if(distToValidBox < overallShortestDistToValidBox) {
+    						closestGoalBox = box;
+    					}
+    					
     				}
     			}
         		
     		}
     		
+    		totalBoxDist += shortestDistToValidBox;
     	}
+    	
+    	double xAgentDist = Math.abs(n.agentRow-closestGoalBox.x);
+		double yAgentDist = Math.abs(n.agentCol-closestGoalBox.y);
+		double agentDist = Math.sqrt(xAgentDist*xAgentDist + yAgentDist*yAgentDist);
+    	
+		totalDist = agentDist + totalBoxDist;
+		
     	return totalDist;
 
 //    	for(int i=0; i<SearchClient.rows; i++){
