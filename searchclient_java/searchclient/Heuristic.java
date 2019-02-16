@@ -52,30 +52,38 @@ public abstract class Heuristic implements Comparator<State> {
     		for(Point box: boxes){
     			char chr = n.boxes[box.x][box.y];
     			if(SearchClient.goals[goal.x][goal.y]==Character.toLowerCase(chr)){
-    				
+    				//Goal to box distance
     				double x = Math.abs(goal.x-box.x);
     				double y = Math.abs(goal.y-box.y);
     				double distToValidBox = Math.sqrt(x*x+y*y);
     				
-    				if(distToValidBox < shortestDistToValidBox){
+					if(distToValidBox < shortestDistToValidBox){
     					shortestDistToValidBox = distToValidBox;
     					
-    					if(distToValidBox < overallShortestDistToValidBox) {
-    						closestGoalBox = box;
+    					if(goalLocations.size() > 1) {
+    						if(distToValidBox != 0 && distToValidBox < overallShortestDistToValidBox) {
+        						closestGoalBox = box; //Remember the box closest to its goal if not already on goal position (can only be done if more than one goal position)
+        					}
+    					} else {
+    						if(distToValidBox < overallShortestDistToValidBox) {
+        						closestGoalBox = box; //Remember the box closest to its goal
+        					}
     					}
     					
     				}
+    				
     			}
-        		
     		}
-    		
+    		//All the shortest distances from a goal position to a valid box
     		totalBoxDist += shortestDistToValidBox;
     	}
     	
+    	//Distance from agent to the box which is closest to its goal position
     	double xAgentDist = Math.abs(n.agentRow-closestGoalBox.x);
 		double yAgentDist = Math.abs(n.agentCol-closestGoalBox.y);
 		double agentDist = Math.sqrt(xAgentDist*xAgentDist + yAgentDist*yAgentDist);
     	
+		//One agent distance with all box distances
 		totalDist = agentDist + totalBoxDist;
 		
     	return totalDist;
