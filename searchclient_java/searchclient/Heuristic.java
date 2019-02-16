@@ -27,27 +27,35 @@ public abstract class Heuristic implements Comparator<State> {
     	//ArrayList<Point> boxLocations = new ArrayList<Point>();
     	//System.err.println("at state \n"+ n.toString());
     	
-    	//ArrayList<Point> importantBoxes = new ArrayList<Point>();
+    	ArrayList<Point> boxes = new ArrayList<Point>();
     	int closestBoxDist = Integer.MAX_VALUE;
     	int totalBoxDist = 0;
     	int shortestAgentDist=Integer.MAX_VALUE;
     	int closestGoalBox = Integer.MAX_VALUE;
     	//Point boxPoint = new Point();
     	
+    	for(int i=0; i<SearchClient.rows; i++){
+    		for(int j=0; j<SearchClient.cols; j++){
+    			char chr = n.boxes[i][j];
+    			if('A' <= chr && chr <= 'Z'){
+    				boxes.add(new Point(i,j));
+    			}
+    		}
+    	}
+    	
     	for(Point goal : goalLocations){
-    		for(int i=0; i<SearchClient.rows; i++){
-        		for(int j=0; j<SearchClient.cols; j++){
-        			char chr = n.boxes[i][j];
-        			if(SearchClient.goals[goal.x][goal.y]==Character.toLowerCase(chr)){
-        				int currentBoxDist = Math.abs(goal.x-i) + Math.abs(goal.y-j);
-        				if(currentBoxDist<closestBoxDist){
-        					closestBoxDist=currentBoxDist;
-        					int xAgentDist = Math.abs(n.agentRow-i);
-        					int yAgentDist = Math.abs(n.agentCol-j);
-        					shortestAgentDist = xAgentDist + yAgentDist;
-        				}
-        			}
-        		}
+    		for(Point box: boxes){
+    			char chr = n.boxes[box.x][box.y];
+    			if(SearchClient.goals[goal.x][goal.y]==Character.toLowerCase(chr)){
+    				int currentBoxDist = Math.abs(goal.x-box.x) + Math.abs(goal.y-box.y);
+    				if(currentBoxDist<closestBoxDist){
+    					closestBoxDist=currentBoxDist;
+    					int xAgentDist = Math.abs(n.agentRow-box.x);
+    					int yAgentDist = Math.abs(n.agentCol-box.y);
+    					shortestAgentDist = xAgentDist + yAgentDist;
+    				}
+    			}
+        		
     		}
     		if(shortestAgentDist<closestGoalBox){
     			closestGoalBox=shortestAgentDist;
