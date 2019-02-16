@@ -34,6 +34,8 @@ public abstract class Heuristic implements Comparator<State> {
     	double closestGoalBox = Integer.MAX_VALUE;
     	//Point boxPoint = new Point();
     	
+    	double totalDist = Integer.MAX_VALUE;
+    	
     	for(int i=0; i<SearchClient.rows; i++){
     		for(int j=0; j<SearchClient.cols; j++){
     			char chr = n.boxes[i][j];
@@ -50,22 +52,23 @@ public abstract class Heuristic implements Comparator<State> {
     				double x = Math.abs(goal.x-box.x);
     				double y = Math.abs(goal.y-box.y);
     				double z = x*x+y*y;
-    				double currentBoxDist = (int) Math.sqrt(z);
-    				if(currentBoxDist<closestBoxDist){
-    					closestBoxDist=currentBoxDist;
-    					double xAgentDist = Math.abs(n.agentRow-box.x);
-    					double yAgentDist = Math.abs(n.agentCol-box.y);
-    					shortestAgentDist = (int) Math.sqrt(xAgentDist*xAgentDist + yAgentDist*yAgentDist);
+    				double currentBoxDist = Math.sqrt(z);
+    				
+    				double xAgentDist = Math.abs(n.agentRow-box.x);
+    				double yAgentDist = Math.abs(n.agentCol-box.y);
+    				double currentAgentDist = Math.sqrt(xAgentDist*xAgentDist + yAgentDist*yAgentDist);
+    				
+    				double currentTotal = currentBoxDist+currentAgentDist;
+    				
+    				if(currentTotal<totalDist){
+    					totalDist=currentTotal;
     				}
     			}
         		
     		}
-    		if(shortestAgentDist<closestGoalBox){
-    			closestGoalBox=shortestAgentDist;
-    		}
-    		totalBoxDist =totalBoxDist +closestBoxDist + shortestAgentDist;
+    		
     	}
-    	return totalBoxDist+closestGoalBox;
+    	return totalDist;
 
 //    	for(int i=0; i<SearchClient.rows; i++){
 //    		for(int j=0; j<SearchClient.cols; j++){
