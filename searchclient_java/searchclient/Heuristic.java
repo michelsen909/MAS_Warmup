@@ -47,12 +47,15 @@ public abstract class Heuristic implements Comparator<State> {
     		for(Point box: boxes){
     			char chr = n.boxes[box.x][box.y];
     			if(SearchClient.goals[goal.x][goal.y]==Character.toLowerCase(chr)){
-    				int currentBoxDist = Math.abs(goal.x-box.x) + Math.abs(goal.y-box.y);
+    				int x = Math.abs(goal.x-box.x);
+    				int y = Math.abs(goal.y-box.y);
+    				int z = x*x+y*y;
+    				int currentBoxDist = (int) Math.sqrt(z);
     				if(currentBoxDist<closestBoxDist){
     					closestBoxDist=currentBoxDist;
     					int xAgentDist = Math.abs(n.agentRow-box.x);
     					int yAgentDist = Math.abs(n.agentCol-box.y);
-    					shortestAgentDist = xAgentDist + yAgentDist;
+    					shortestAgentDist = (int) Math.sqrt(xAgentDist*xAgentDist + yAgentDist*yAgentDist);
     				}
     			}
         		
