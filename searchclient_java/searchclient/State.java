@@ -13,8 +13,6 @@ public class State {
 
     public int agentRow;
     public int agentCol;
-    
-    public int hValue=0;
 
     // Arrays are indexed from the top-left of the level, with first index being row and second being column.
     // Row 0: (0,0) (0,1) (0,2) (0,3) ...
@@ -209,14 +207,6 @@ public class State {
             s.append("\n");
         }
         return s.toString();
-    }
-    
-    public int getHValue(){
-    	return hValue;
-    }
-    
-    public void setHValue(int v){
-    	hValue=v;
     }
 
 }
