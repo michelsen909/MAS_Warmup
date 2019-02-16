@@ -20,7 +20,7 @@ public abstract class Heuristic implements Comparator<State> {
    	}
    }
 
-    public int h(State n) {
+    public double h(State n) {
     	//int distSum=0;
     	//int shortestAgentDist = Integer.MAX_VALUE;
     	//Point agentLoc = new Point(n.agentRow, n.agentCol);
@@ -28,10 +28,10 @@ public abstract class Heuristic implements Comparator<State> {
     	//System.err.println("at state \n"+ n.toString());
     	
     	ArrayList<Point> boxes = new ArrayList<Point>();
-    	int closestBoxDist = Integer.MAX_VALUE;
-    	int totalBoxDist = 0;
-    	int shortestAgentDist=Integer.MAX_VALUE;
-    	int closestGoalBox = Integer.MAX_VALUE;
+    	double closestBoxDist = Integer.MAX_VALUE;
+    	double totalBoxDist = 0;
+    	double shortestAgentDist=Integer.MAX_VALUE;
+    	double closestGoalBox = Integer.MAX_VALUE;
     	//Point boxPoint = new Point();
     	
     	for(int i=0; i<SearchClient.rows; i++){
@@ -47,14 +47,14 @@ public abstract class Heuristic implements Comparator<State> {
     		for(Point box: boxes){
     			char chr = n.boxes[box.x][box.y];
     			if(SearchClient.goals[goal.x][goal.y]==Character.toLowerCase(chr)){
-    				int x = Math.abs(goal.x-box.x);
-    				int y = Math.abs(goal.y-box.y);
-    				int z = x*x+y*y;
-    				int currentBoxDist = (int) Math.sqrt(z);
+    				double x = Math.abs(goal.x-box.x);
+    				double y = Math.abs(goal.y-box.y);
+    				double z = x*x+y*y;
+    				double currentBoxDist = (int) Math.sqrt(z);
     				if(currentBoxDist<closestBoxDist){
     					closestBoxDist=currentBoxDist;
-    					int xAgentDist = Math.abs(n.agentRow-box.x);
-    					int yAgentDist = Math.abs(n.agentCol-box.y);
+    					double xAgentDist = Math.abs(n.agentRow-box.x);
+    					double yAgentDist = Math.abs(n.agentCol-box.y);
     					shortestAgentDist = (int) Math.sqrt(xAgentDist*xAgentDist + yAgentDist*yAgentDist);
     				}
     			}
@@ -97,11 +97,15 @@ public abstract class Heuristic implements Comparator<State> {
         //throw new NotImplementedException();
     }
 
-    public abstract int f(State n);
+    public abstract double f(State n);
 
     @Override
     public int compare(State n1, State n2) {
-        return this.f(n1) - this.f(n2);
+    	if (this.f(n1) < this.f(n2)) return -1;
+        if (this.f(n1) > this.f(n2)) return 1;
+        return 0;
+    	
+        //return this.f(n1) - this.f(n2);
     }
 
     public static class AStar extends Heuristic {
@@ -110,7 +114,7 @@ public abstract class Heuristic implements Comparator<State> {
         }
 
         @Override
-        public int f(State n) {
+        public double f(State n) {
             return n.g() + this.h(n);
         }
 
@@ -129,7 +133,7 @@ public abstract class Heuristic implements Comparator<State> {
         }
 
         @Override
-        public int f(State n) {
+        public double f(State n) {
             return n.g() + this.W * this.h(n);
         }
 
@@ -145,7 +149,7 @@ public abstract class Heuristic implements Comparator<State> {
         }
 
         @Override
-        public int f(State n) {
+        public double f(State n) {
             return this.h(n);
         }
 
