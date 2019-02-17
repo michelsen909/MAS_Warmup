@@ -26,15 +26,14 @@ public abstract class Heuristic implements Comparator<State> {
     	//int shortestAgentDist = Integer.MAX_VALUE;
     	//Point agentLoc = new Point(n.agentRow, n.agentCol);
     	//ArrayList<Point> boxLocations = new ArrayList<Point>();
-    	//System.err.println("at state \n"+ n.toString());
+//    	System.err.println("at state \n"+ n.toString());
     	
     	ArrayList<Point> boxes = new ArrayList<Point>();
     	double overallShortestDistToValidBox = Integer.MAX_VALUE;
     	
     	double totalBoxDist = 0;
     	double totalDist = 0;
-    	
-    	//double goalDist =  Integer.MAX_VALUE;
+    	double totalSingleGoalBoxDist =  Integer.MAX_VALUE;
     	//double closestGoalDist = Integer.MAX_VALUE;
     	//double shortestAgentDist=Integer.MAX_VALUE;
     	
@@ -53,9 +52,11 @@ public abstract class Heuristic implements Comparator<State> {
     			char chr = n.boxes[box.x][box.y];
     			if(SearchClient.goals[goal.x][goal.y]==Character.toLowerCase(chr)){
     				//Goal to box distance
-    				double x = Math.abs(goal.x-box.x)*2;
-    				double y = Math.abs(goal.y-box.y)*2;
+    				double x = Math.abs(goal.x-box.x);
+    				double y = Math.abs(goal.y-box.y);
     				double distToValidBox = Math.sqrt(x*x+y*y);
+    				
+    				totalSingleGoalBoxDist += distToValidBox;
     				
 					if(distToValidBox < shortestDistToValidBox){
     					shortestDistToValidBox = distToValidBox;
@@ -79,14 +80,19 @@ public abstract class Heuristic implements Comparator<State> {
     	}
     	
     	//Distance from agent to the box which is closest to its goal position
-    	double xAgentDist = Math.abs(n.agentRow-closestGoalBox.x)*2;
-		double yAgentDist = Math.abs(n.agentCol-closestGoalBox.y)*2;
+    	double xAgentDist = Math.abs(n.agentRow-closestGoalBox.x);
+		double yAgentDist = Math.abs(n.agentCol-closestGoalBox.y);
 		double agentDist = Math.sqrt(xAgentDist*xAgentDist + yAgentDist*yAgentDist);
     	
 		//One agent distance with all box distances
-		totalDist = agentDist + totalBoxDist;
+		totalDist = agentDist + totalSingleGoalBoxDist;
 		
-    	return totalDist;
+//		System.err.println("agentDist: "+ agentDist);
+//		System.err.println("totalBoxDist: "+ totalBoxDist);
+//		System.err.println("totalDist: "+ totalDist);
+//		System.err.println("----------------------------");
+    	
+		return totalDist;
 
 //    	for(int i=0; i<SearchClient.rows; i++){
 //    		for(int j=0; j<SearchClient.cols; j++){

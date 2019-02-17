@@ -158,6 +158,7 @@ public abstract class Strategy {
         	frontier.add(n);
         	frontierSet.add(n);
         	frontier.sort(heuristic);
+//        	System.err.println("////////////////////////////////");
         }
 
         @Override
