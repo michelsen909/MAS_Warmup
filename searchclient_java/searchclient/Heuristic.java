@@ -53,8 +53,8 @@ public abstract class Heuristic implements Comparator<State> {
     			char chr = n.boxes[box.x][box.y];
     			if(SearchClient.goals[goal.x][goal.y]==Character.toLowerCase(chr)){
     				//Goal to box distance
-    				double x = Math.abs(goal.x-box.x);
-    				double y = Math.abs(goal.y-box.y);
+    				double x = Math.abs(goal.x-box.x)*2;
+    				double y = Math.abs(goal.y-box.y)*2;
     				double distToValidBox = Math.sqrt(x*x+y*y);
     				
 					if(distToValidBox < shortestDistToValidBox){
@@ -79,8 +79,8 @@ public abstract class Heuristic implements Comparator<State> {
     	}
     	
     	//Distance from agent to the box which is closest to its goal position
-    	double xAgentDist = Math.abs(n.agentRow-closestGoalBox.x);
-		double yAgentDist = Math.abs(n.agentCol-closestGoalBox.y);
+    	double xAgentDist = Math.abs(n.agentRow-closestGoalBox.x)*2;
+		double yAgentDist = Math.abs(n.agentCol-closestGoalBox.y)*2;
 		double agentDist = Math.sqrt(xAgentDist*xAgentDist + yAgentDist*yAgentDist);
     	
 		//One agent distance with all box distances
