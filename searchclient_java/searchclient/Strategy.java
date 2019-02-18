@@ -165,7 +165,7 @@ public abstract class Strategy {
 
         @Override
         public void addToFrontier(State n) {
-        	int h = heuristic.h(n);
+        	int h = heuristic.f(n);
         	StatePair sp = new StatePair(n,h);
         	boolean hasAdded=false;
         	for (int i = 0; i<frontier.size(); i++){
