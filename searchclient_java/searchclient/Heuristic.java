@@ -52,17 +52,18 @@ public abstract class Heuristic implements Comparator<State> {
     			}
         		
     		}
-    		int sumDist = shortestAgentDist + closestBoxDist;
+    		/*int sumDist = shortestAgentDist + closestBoxDist;
     		//sumDist=sumDist*2;
     		if(sumDist <closestGoalBox && sumDist>0){
     			closestGoalBox=sumDist;
     			//System.err.println("sumDist: " + sumDist + " and box dist: " + closestBoxDist + " and agent: " + shortestAgentDist);
-    		}
-    		totalBoxDist =totalBoxDist +closestBoxDist;// + shortestAgentDist;
+    		}*/
+    		
+    		totalBoxDist =totalBoxDist +closestBoxDist*2 +shortestAgentDist;// + shortestAgentDist;
     	}
     	//System.err.println(n);
     	//System.err.println("\nTotal h(n): " + (totalBoxDist+closestGoalBox));
-    	return totalBoxDist+closestGoalBox;
+    	return totalBoxDist;//+closestGoalBox;
 
 //    	
     }
