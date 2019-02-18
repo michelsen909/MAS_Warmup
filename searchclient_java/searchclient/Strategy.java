@@ -134,30 +134,52 @@ public abstract class Strategy {
         }
     }
 
+    public class StatePair{
+    	public State s;
+    	public int h;
+    	
+    	StatePair(State s, int h){
+    		this.h=h;
+    		this.s=s;
+    	}
+    }
+    
     public static class StrategyBestFirst extends Strategy {
         private Heuristic heuristic;
-    	private ArrayList<State> frontier;
+    	private ArrayList<StatePair> frontier;
         private HashSet<State> frontierSet;
 
         public StrategyBestFirst(Heuristic h) {
             super();
             this.heuristic = h;
-            frontier = new ArrayList<State>();
+            frontier = new ArrayList<StatePair>();
             frontierSet = new HashSet<>();
         }
 
         @Override
         public State getAndRemoveLeaf() {
-        	State n = frontier.remove(0);
+        	StatePair n = frontier.remove(0);
             frontierSet.remove(n);
-            return n;
+            return n.s;
         }
 
         @Override
         public void addToFrontier(State n) {
-        	frontier.add(n);
+        	int h = heuristic.h(n);
+        	StatePair sp = new StatePair(n,h);
+        	boolean hasAdded=false;
+        	for (int i = 0; i<frontier.size(); i++){
+        		if(h<frontier.get(i).h){
+        			frontier.add(i,sp);
+        			hasAdded=true;
+        			break;
+        		}
+        	}
+        	if (!hasAdded){
+        		frontier.add(sp);	
+        	}
         	frontierSet.add(n);
-        	frontier.sort(heuristic);
+        	//frontier.sort(heuristic);
         }
 
         @Override

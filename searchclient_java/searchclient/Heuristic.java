@@ -21,18 +21,12 @@ public abstract class Heuristic implements Comparator<State> {
    }
 
     public int h(State n) {
-    	//int distSum=0;
-    	//int shortestAgentDist = Integer.MAX_VALUE;
-    	//Point agentLoc = new Point(n.agentRow, n.agentCol);
-    	//ArrayList<Point> boxLocations = new ArrayList<Point>();
-    	//System.err.println("at state \n"+ n.toString());
+
     	
     	ArrayList<Point> boxes = new ArrayList<Point>();
-    	int closestBoxDist = Integer.MAX_VALUE;
     	int totalBoxDist = 0;
     	int shortestAgentDist=Integer.MAX_VALUE;
     	int closestGoalBox = Integer.MAX_VALUE;
-    	//Point boxPoint = new Point();
     	
     	for(int i=0; i<SearchClient.rows; i++){
     		for(int j=0; j<SearchClient.cols; j++){
@@ -44,6 +38,7 @@ public abstract class Heuristic implements Comparator<State> {
     	}
     	
     	for(Point goal : goalLocations){
+    		int closestBoxDist = Integer.MAX_VALUE;
     		for(Point box: boxes){
     			char chr = n.boxes[box.x][box.y];
     			if(SearchClient.goals[goal.x][goal.y]==Character.toLowerCase(chr)){
@@ -57,41 +52,19 @@ public abstract class Heuristic implements Comparator<State> {
     			}
         		
     		}
-    		if(shortestAgentDist<closestGoalBox){
-    			closestGoalBox=shortestAgentDist;
+    		int sumDist = shortestAgentDist + closestBoxDist;
+    		//sumDist=sumDist*2;
+    		if(sumDist <closestGoalBox && sumDist>0){
+    			closestGoalBox=sumDist;
+    			//System.err.println("sumDist: " + sumDist + " and box dist: " + closestBoxDist + " and agent: " + shortestAgentDist);
     		}
-    		totalBoxDist =totalBoxDist +closestBoxDist + shortestAgentDist;
+    		totalBoxDist =totalBoxDist +closestBoxDist;// + shortestAgentDist;
     	}
+    	//System.err.println(n);
+    	//System.err.println("\nTotal h(n): " + (totalBoxDist+closestGoalBox));
     	return totalBoxDist+closestGoalBox;
 
-//    	for(int i=0; i<SearchClient.rows; i++){
-//    		for(int j=0; j<SearchClient.cols; j++){
-//    			char chr = n.boxes[i][j];
-//    			if('A' <= chr && chr <= 'Z'){
-//    				Point boxP = new Point(i,j);
-//    				//boxLocations.add(new Point(i,j));
-//
-//    				for (Point p: goalLocations) {
-//    				    if(SearchClient.goals[p.x][p.y]==Character.toLowerCase(chr)){
-//    				    	int xDist = Math.abs(p.x-boxP.x);
-//    				    	int yDist = Math.abs(p.y-boxP.y);
-//    				    	if(xDist!=0 || yDist!=0){
-//    				    		int xAgentDist = Math.abs(agentLoc.x-boxP.x);
-//    					    	int yAgentDist = Math.abs(agentLoc.y-boxP.y);
-//    					    	int agentDist= xAgentDist + yAgentDist;
-//    					    	
-//    					    	if(agentDist<shortestAgentDist){
-//    					    		shortestAgentDist = agentDist;
-//    					    	}
-//    					    	distSum = distSum + xDist + yDist;
-//    				    	}
-//    				    }
-//    				}
-//    			}
-//    		}
-//    	}
-    	//return distSum+shortestAgentDist;
-        //throw new NotImplementedException();
+//    	
     }
 
     public abstract int f(State n);
