@@ -25,8 +25,10 @@ public abstract class Heuristic implements Comparator<State> {
     	
     	ArrayList<Point> boxes = new ArrayList<Point>();
     	int totalBoxDist = 0;
-    	int shortestAgentDist=Integer.MAX_VALUE;
+    	int totalAgentDist=0;
+    	int shortestAgentDist=0;
     	int closestGoalBox = Integer.MAX_VALUE;
+    
     	
     	for(int i=0; i<SearchClient.rows; i++){
     		for(int j=0; j<SearchClient.cols; j++){
@@ -38,6 +40,9 @@ public abstract class Heuristic implements Comparator<State> {
     	}
     	
     	for(Point goal : goalLocations){
+    		if( n.boxes[goal.x][goal.y]==SearchClient.goals[goal.x][goal.y]){
+    			continue;
+    		}
     		int closestBoxDist = Integer.MAX_VALUE;
     		for(Point box: boxes){
     			char chr = n.boxes[box.x][box.y];
@@ -47,23 +52,31 @@ public abstract class Heuristic implements Comparator<State> {
     					closestBoxDist=currentBoxDist;
     					int xAgentDist = Math.abs(n.agentRow-box.x);
     					int yAgentDist = Math.abs(n.agentCol-box.y);
-    					shortestAgentDist = xAgentDist + yAgentDist;
+    					if(currentBoxDist>0){
+        					shortestAgentDist = xAgentDist + yAgentDist;    						
+    					}else{
+    						shortestAgentDist=0;
+    						break;
+    					}
     				}
     			}
         		
     		}
-    		/*int sumDist = shortestAgentDist + closestBoxDist;
+    		/*int sumDist = shortestAgentDist;
     		//sumDist=sumDist*2;
     		if(sumDist <closestGoalBox && sumDist>0){
     			closestGoalBox=sumDist;
     			//System.err.println("sumDist: " + sumDist + " and box dist: " + closestBoxDist + " and agent: " + shortestAgentDist);
     		}*/
-    		
-    		totalBoxDist =totalBoxDist +closestBoxDist*2 +shortestAgentDist;// + shortestAgentDist;
+    		totalAgentDist = totalAgentDist + shortestAgentDist;
+    		totalBoxDist =totalBoxDist +closestBoxDist;// + shortestAgentDist;
     	}
     	//System.err.println(n);
     	//System.err.println("\nTotal h(n): " + (totalBoxDist+closestGoalBox));
-    	return totalBoxDist;//+closestGoalBox;
+    	if(closestGoalBox==Integer.MAX_VALUE){
+    		closestGoalBox=0;
+    	}
+    	return totalBoxDist + totalAgentDist+ closestGoalBox;
 
 //    	
     }
